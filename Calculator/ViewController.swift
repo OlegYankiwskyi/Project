@@ -16,15 +16,22 @@ enum MathOperation: Int  {
      division
 }
 
+enum Input {
+    case result
+    case myValue
+}
+
 struct Status {
     var oldResult = 0.0
     var oldOperation: MathOperation = .none
     var doneOperation = true
+    var input: Input = .myValue
     
     mutating func reset() {
         oldResult = 0.0
         oldOperation = .none
         doneOperation = true
+        input = .myValue
     }
 }
 
@@ -42,7 +49,13 @@ class ViewController: UIViewController {
         calculate(newValue: inputValue)
     }
     @IBAction func onButtonDigit(_ sender: UIButton) {
-        resultLabel.text = resultLabel.text! + "\(sender.tag)"
+        switch status.input {
+        case .result:
+            status.input = .myValue
+            resultLabel.text = "\(sender.tag)"
+        case .myValue:
+            resultLabel.text = resultLabel.text! + "\(sender.tag)"
+        }
     }
     
     @IBAction func onButtonOpetation(_ sender: UIButton) {
@@ -50,9 +63,9 @@ class ViewController: UIViewController {
             clearLabelResult()
             return
         }
-        print("doneOperation : \(status.doneOperation)")
-        print("oldResult : \(status.oldResult)")
-        print("oldOperation: \(status.oldOperation)")
+//        print("doneOperation : \(status.doneOperation)")
+//        print("oldResult : \(status.oldResult)")
+//        print("oldOperation: \(status.oldOperation)")
 
         if status.doneOperation == false {
             calculate(newValue: newValue)
@@ -109,7 +122,8 @@ class ViewController: UIViewController {
         }
         status.oldResult = newValue
         status.doneOperation = true
-        resultLabel.text = String(newValue)
+        status.input = .result
+        resultLabel.text = 12
     }
 
 }
