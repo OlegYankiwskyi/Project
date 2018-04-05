@@ -103,13 +103,6 @@ class ViewController: UIViewController {
                 return
         }
         
-//            print("doneOperation : \(status.doneOperation)")
-//            print("oldResult : \(status.oldResult)")
-//            print("oldOperation: \(status.oldOperation)")
-//            print("statusInput: :\(status.input)")
-//            print()
-        
-        
     }
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
