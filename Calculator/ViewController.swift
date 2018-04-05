@@ -42,6 +42,11 @@ class ViewController: UIViewController {
     
     var status = Status()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
     @IBAction func onButtonDigit(_ sender: UIButton) {
         guard let inputValue = resultLabel.text else {
             cleanLable()
