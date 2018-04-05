@@ -108,9 +108,12 @@ class ViewController: UIViewController {
     }
     
     
-    @IBAction func onButtonClear(_ sender: UIButton) {
+    @IBAction func onButtonReset(_ sender: UIButton) {
         clearLabelResult()
         status.reset()
+    }
+    @IBAction func onButtonClear(_ sender: UIButton) {
+        clearLabelResult()
     }
     
     func calculate(newValue: Double) {

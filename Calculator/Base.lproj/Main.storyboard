@@ -37,6 +37,10 @@
                                                 <rect key="frame" x="94" y="0.0" width="93.5" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                <state key="normal" title="reset"/>
+                                                <connections>
+                                                    <action selector="onButtonReset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qMF-Gc-UNT"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lvd-zT-LPy">
                                                 <rect key="frame" x="187.5" y="0.0" width="94" height="113.5"/>
@@ -60,6 +64,7 @@
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttx-85-BCK">
                                                 <rect key="frame" x="0.0" y="0.0" width="94" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="1">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -70,6 +75,7 @@
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MEk-fi-13P">
                                                 <rect key="frame" x="94" y="0.0" width="93.5" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="2">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -80,6 +86,7 @@
                                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YRE-Yl-4iL">
                                                 <rect key="frame" x="187.5" y="0.0" width="94" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="3">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -104,6 +111,7 @@
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nVu-zv-ZgV">
                                                 <rect key="frame" x="0.0" y="0.0" width="94" height="113"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="4">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -114,6 +122,7 @@
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ma9-eX-UO6">
                                                 <rect key="frame" x="94" y="0.0" width="93.5" height="113"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="5">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -124,6 +133,7 @@
                                             <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="waE-OD-8wm">
                                                 <rect key="frame" x="187.5" y="0.0" width="94" height="113"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="6">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -148,6 +158,7 @@
                                             <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rUk-9X-X7x">
                                                 <rect key="frame" x="0.0" y="0.0" width="94" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="7">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -158,6 +169,7 @@
                                             <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dXG-de-LBB">
                                                 <rect key="frame" x="94" y="0.0" width="93.5" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="8">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -168,6 +180,7 @@
                                             <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ADm-XW-jfN">
                                                 <rect key="frame" x="187.5" y="0.0" width="94" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                 <state key="normal" title="9">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -195,6 +208,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hpq-Kr-kIq">
                                                         <rect key="frame" x="0.0" y="0.0" width="94" height="113.5"/>
                                                         <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                         <state key="normal" title="0">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
@@ -205,6 +219,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMt-Jr-8XZ">
                                                         <rect key="frame" x="94" y="0.0" width="93.5" height="113.5"/>
                                                         <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                         <state key="normal" title=".">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
