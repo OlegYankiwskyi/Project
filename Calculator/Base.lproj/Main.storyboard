@@ -279,16 +279,6 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="resultLabel" destination="JWt-sa-C0y" id="gSM-NI-Pju"/>
-                        <outletCollection property="buttonNumbers" destination="Ttx-85-BCK" collectionClass="NSMutableArray" id="0Fh-UA-e7F"/>
-                        <outletCollection property="buttonNumbers" destination="YRE-Yl-4iL" collectionClass="NSMutableArray" id="aBb-4A-12o"/>
-                        <outletCollection property="buttonNumbers" destination="MEk-fi-13P" collectionClass="NSMutableArray" id="Q1G-cp-QPB"/>
-                        <outletCollection property="buttonNumbers" destination="nVu-zv-ZgV" collectionClass="NSMutableArray" id="YIl-fG-u7e"/>
-                        <outletCollection property="buttonNumbers" destination="waE-OD-8wm" collectionClass="NSMutableArray" id="Xhx-rD-zQi"/>
-                        <outletCollection property="buttonNumbers" destination="ma9-eX-UO6" collectionClass="NSMutableArray" id="h40-jT-jqJ"/>
-                        <outletCollection property="buttonNumbers" destination="dXG-de-LBB" collectionClass="NSMutableArray" id="xga-xx-duB"/>
-                        <outletCollection property="buttonNumbers" destination="ADm-XW-jfN" collectionClass="NSMutableArray" id="q8A-Gm-06O"/>
-                        <outletCollection property="buttonNumbers" destination="rUk-9X-X7x" collectionClass="NSMutableArray" id="jc0-Ow-xdT"/>
-                        <outletCollection property="buttonNumbers" destination="Hpq-Kr-kIq" collectionClass="NSMutableArray" id="9Ih-Wi-WTO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
