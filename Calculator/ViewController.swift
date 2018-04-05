@@ -77,6 +77,7 @@ class ViewController: UIViewController {
             resultLabel.text = "-" + inputValue
         }
     }
+    
     @IBAction func onButtonOpetation(_ sender: UIButton) {
         guard let inputValue = resultLabel.text, !inputValue.isEmpty, let newValue = Double(inputValue) else {
             return
