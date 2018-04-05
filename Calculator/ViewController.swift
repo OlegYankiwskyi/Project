@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum MathOperation: Int  {
+enum MathOperation: Int {
     case none = 99,
      plus,
      minus,
@@ -48,24 +48,28 @@ class ViewController: UIViewController {
         }
         calculate(newValue: inputValue)
     }
+    
     @IBAction func onButtonDigit(_ sender: UIButton) {
         switch status.input {
         case .result:
             status.input = .myValue
+            status.doneOperation = false
             resultLabel.text = "\(sender.tag)"
         case .myValue:
             resultLabel.text = resultLabel.text! + "\(sender.tag)"
         }
+        print("doneOperation : \(status.doneOperation)")
+        print("oldResult : \(status.oldResult)")
+        print("oldOperation: \(status.oldOperation)")
+        print("statusInput: :\(status.input)")
+        print()
     }
     
     @IBAction func onButtonOpetation(_ sender: UIButton) {
         guard let inputValue = clearLabelResult(), !inputValue.isEmpty, let newValue = Double(inputValue) else {
-            clearLabelResult()
             return
         }
-//        print("doneOperation : \(status.doneOperation)")
-//        print("oldResult : \(status.oldResult)")
-//        print("oldOperation: \(status.oldOperation)")
+
 
         if status.doneOperation == false {
             calculate(newValue: newValue)
@@ -89,7 +93,11 @@ class ViewController: UIViewController {
         default:
             return
         }
-
+        print("doneOperation : \(status.doneOperation)")
+        print("oldResult : \(status.oldResult)")
+        print("oldOperation: \(status.oldOperation)")
+        print("statusInput: :\(status.input)")
+        print()
     }
     
     @discardableResult
@@ -123,7 +131,7 @@ class ViewController: UIViewController {
         status.oldResult = newValue
         status.doneOperation = true
         status.input = .result
-        resultLabel.text = 12
+        resultLabel.text = String(newValue)
     }
 
 }
