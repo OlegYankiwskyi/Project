@@ -19,6 +19,7 @@ enum MathOperation: Int {
 enum Input {
     case result
     case myValue
+    case oldValue
 }
 
 struct Status {
@@ -43,7 +44,7 @@ class ViewController: UIViewController {
     var status = Status()
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
-        guard let inputValue = Double(clearLabelResult()!) else {
+        guard let inputValue = Double(resultLabel.text!) , !status.doneOperation else {
             return
         }
         calculate(newValue: inputValue)
@@ -57,6 +58,10 @@ class ViewController: UIViewController {
             resultLabel.text = "\(sender.tag)"
         case .myValue:
             resultLabel.text = resultLabel.text! + "\(sender.tag)"
+        case .oldValue:
+            status.input = .myValue
+            status.doneOperation = false
+            resultLabel.text = "\(sender.tag)"
         }
         print("doneOperation : \(status.doneOperation)")
         print("oldResult : \(status.oldResult)")
@@ -66,15 +71,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onButtonOpetation(_ sender: UIButton) {
-        guard let inputValue = clearLabelResult(), !inputValue.isEmpty, let newValue = Double(inputValue) else {
+        guard let inputValue = resultLabel.text, !inputValue.isEmpty, let newValue = Double(inputValue) else {
             return
         }
-
+        
 
         if status.doneOperation == false {
             calculate(newValue: newValue)
         }
         else {
+            status.input = .oldValue
             status.oldResult = newValue
             status.doneOperation = false
         }
@@ -100,20 +106,14 @@ class ViewController: UIViewController {
         print()
     }
     
-    @discardableResult
-    func clearLabelResult() -> String? {
-        let labelText = resultLabel.text
-        resultLabel.text = ""
-        return labelText
-    }
-    
     
     @IBAction func onButtonReset(_ sender: UIButton) {
-        clearLabelResult()
+        resultLabel.text = ""
         status.reset()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
-        clearLabelResult()
+        resultLabel.text = ""
+        
     }
     
     func calculate(newValue: Double) {
