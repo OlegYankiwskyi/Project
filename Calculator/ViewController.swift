@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     
     @IBAction func onButtonDigit(_ sender: UIButton) {
         guard let inputValue = resultLabel.text else {
-            resultLabel.text = ""
+            cleanLable()
             status.reset()
             return
         }
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
     
     @IBAction func onButtonOpetation(_ sender: UIButton) {
         guard let inputValue = resultLabel.text, !inputValue.isEmpty, let newValue = Double(inputValue) else {
-            resultLabel.text = ""
+            cleanLable()
             status.reset()
             return
         }
@@ -83,7 +83,6 @@ class ViewController: UIViewController {
         } else {
             status.input = .oldValue
             status.oldResult = newValue
-            status.doneOperation = false
         }
 
         switch sender.tag {
@@ -107,9 +106,8 @@ class ViewController: UIViewController {
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
         guard let inputValue = resultLabel.text else {
-            resultLabel.text = ""
+            cleanLable()
             status.reset()
-            print("Bug")
             return
         }
         
@@ -122,7 +120,7 @@ class ViewController: UIViewController {
 
         case .result , .myValue:
             
-            if inputValue.range(of:"-") != nil {
+            if inputValue.contains("-") {
                 resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
             } else {
                 resultLabel.text = "-" + inputValue
@@ -143,7 +141,7 @@ class ViewController: UIViewController {
     
     @IBAction func onButtonDot(_ sender: UIButton) {
         guard let inputValue = resultLabel.text, !inputValue.isEmpty else {
-            resultLabel.text = ""
+            cleanLable()
             status.reset()
             return
         }
@@ -156,7 +154,7 @@ class ViewController: UIViewController {
             resultLabel.text = "0."
             
         case .myValue:
-            if inputValue.range(of:".") == nil {
+            if !inputValue.contains(".") {
                 resultLabel.text = inputValue + "."
             }
         }
@@ -165,11 +163,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onButtonReset(_ sender: UIButton) {
-        resultLabel.text = ""
+        cleanLable()
         status.reset()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
-        resultLabel.text = ""
+        cleanLable()
     }
     
     func calculate(newValue: Double) {
@@ -192,6 +190,10 @@ class ViewController: UIViewController {
         status.doneOperation = true
         status.input = .result
         resultLabel.text = newValue .truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", newValue) : String(newValue)
+    }
+    
+    func cleanLable() {
+        resultLabel.text = "0"
     }
 }
 
