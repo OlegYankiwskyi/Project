@@ -49,7 +49,12 @@ class ViewController: UIViewController {
             return
         }
         
-        if inputValue == "0" && sender.tag == 0 {
+        if inputValue == "0" {
+            resultLabel.text = "\(sender.tag)"
+            return
+        }
+        else if inputValue == "-0" {
+            resultLabel.text = "-\(sender.tag)"
             return
         }
         
@@ -97,26 +102,46 @@ class ViewController: UIViewController {
             default:
                 return
         }
+        
+//            print("doneOperation : \(status.doneOperation)")
+//            print("oldResult : \(status.oldResult)")
+//            print("oldOperation: \(status.oldOperation)")
+//            print("statusInput: :\(status.input)")
+//            print()
+        
+        
     }
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
         guard let inputValue = resultLabel.text else {
             resultLabel.text = ""
             status.reset()
+            print("Bug")
             return
         }
         
-        if inputValue.range(of:"-") != nil {
-            resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
-        } else {
-            resultLabel.text = "-" + inputValue
+        switch status.input {
+            
+        case .result , .oldValue:
+            status.input = .myValue
+            status.doneOperation = false
+            resultLabel.text = "\(sender.tag)"
+
+        case .myValue:
+            
+            if inputValue.range(of:"-") != nil {
+                resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
+            } else {
+                resultLabel.text = "-" + inputValue
+            }
+            
         }
+        
+        
     }
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
         guard let inputValue = Double(resultLabel.text!) , !status.doneOperation else {
-            resultLabel.text = ""
-            status.reset()
             return
         }
         calculate(newValue: inputValue)
@@ -130,9 +155,20 @@ class ViewController: UIViewController {
             return
         }
         
-        if inputValue.range(of:".") == nil {
-            resultLabel.text = inputValue + "."
+        switch status.input {
+            
+        case .result , .oldValue:
+            status.input = .myValue
+            status.doneOperation = false
+            resultLabel.text = "0."
+            
+        case .myValue:
+            if inputValue.range(of:".") == nil {
+                resultLabel.text = inputValue + "."
+            }
         }
+        
+        
     }
     
     @IBAction func onButtonReset(_ sender: UIButton) {
@@ -158,11 +194,11 @@ class ViewController: UIViewController {
         default:
             return
         }
+
         status.oldResult = newValue
         status.doneOperation = true
         status.input = .result
-        resultLabel.text = String(newValue)
+        resultLabel.text = newValue .truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", newValue) : String(newValue)
     }
-
 }
 
