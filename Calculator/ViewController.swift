@@ -38,14 +38,11 @@ struct Status {
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
     
     var status = Status()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     
     @IBAction func onButtonDigit(_ sender: UIButton) {
         guard let inputValue = resultLabel.text else {
@@ -82,7 +79,6 @@ class ViewController: UIViewController {
             return
         }
         
-
         if status.doneOperation == false {
             calculate(newValue: newValue)
         } else {
@@ -93,15 +89,19 @@ class ViewController: UIViewController {
         switch sender.tag {
             case MathOperation.plus.rawValue:
                 status.oldOperation = .plus
+                operationLabel.text = "+"
             
             case MathOperation.minus.rawValue:
                 status.oldOperation = .minus
+                operationLabel.text = "-"
             
             case MathOperation.multiplication.rawValue:
                 status.oldOperation = .multiplication
+                operationLabel.text = "*"
             
             case MathOperation.division.rawValue:
                 status.oldOperation = .division
+                operationLabel.text = "/"
             
             default:
                 return
@@ -141,6 +141,7 @@ class ViewController: UIViewController {
             return
         }
         calculate(newValue: inputValue)
+        operationLabel.text = ""
     }
 
     
@@ -163,13 +164,12 @@ class ViewController: UIViewController {
                 resultLabel.text = inputValue + "."
             }
         }
-        
-        
     }
     
     @IBAction func onButtonReset(_ sender: UIButton) {
         cleanLable()
         status.reset()
+        operationLabel.text = ""
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
         cleanLable()
