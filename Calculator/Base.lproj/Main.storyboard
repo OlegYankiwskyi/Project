@@ -46,6 +46,10 @@
                                                 <rect key="frame" x="187.5" y="0.0" width="94" height="113.5"/>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                <state key="normal" title="+/-"/>
+                                                <connections>
+                                                    <action selector="onButtonChangeSign:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rc4-Wn-MHU"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HfT-PR-Qd2">
                                                 <rect key="frame" x="281.5" y="0.0" width="93.5" height="113.5"/>
@@ -223,6 +227,9 @@
                                                         <state key="normal" title=".">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="onButtonDot:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w3D-qQ-Rke"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" red="1" green="0.94071903069999996" blue="0.83028969269999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -63,13 +63,20 @@ class ViewController: UIViewController {
             status.doneOperation = false
             resultLabel.text = "\(sender.tag)"
         }
-        print("doneOperation : \(status.doneOperation)")
-        print("oldResult : \(status.oldResult)")
-        print("oldOperation: \(status.oldOperation)")
-        print("statusInput: :\(status.input)")
-        print()
     }
     
+    @IBAction func onButtonChangeSign(_ sender: UIButton) {
+        guard let inputValue = resultLabel.text else {
+            resultLabel.text = ""
+            status.reset()
+            return
+        }
+        if inputValue.range(of:"-") != nil {
+            resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
+        } else {
+            resultLabel.text = "-" + inputValue
+        }
+    }
     @IBAction func onButtonOpetation(_ sender: UIButton) {
         guard let inputValue = resultLabel.text, !inputValue.isEmpty, let newValue = Double(inputValue) else {
             return
@@ -84,7 +91,6 @@ class ViewController: UIViewController {
             status.oldResult = newValue
             status.doneOperation = false
         }
-        
 
         switch sender.tag {
 
@@ -99,11 +105,6 @@ class ViewController: UIViewController {
         default:
             return
         }
-        print("doneOperation : \(status.doneOperation)")
-        print("oldResult : \(status.oldResult)")
-        print("oldOperation: \(status.oldOperation)")
-        print("statusInput: :\(status.input)")
-        print()
     }
     
     
@@ -113,7 +114,16 @@ class ViewController: UIViewController {
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
         resultLabel.text = ""
+    }
+    
+    @IBAction func onButtonDot(_ sender: UIButton) {
+        guard let inputValue = resultLabel.text, !inputValue.isEmpty else {
+            return
+        }
         
+        if inputValue.range(of:".") == nil {
+            resultLabel.text = inputValue + "."
+        }
     }
     
     func calculate(newValue: Double) {
