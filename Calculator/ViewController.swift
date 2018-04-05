@@ -115,12 +115,12 @@ class ViewController: UIViewController {
         
         switch status.input {
             
-        case .result , .oldValue:
+        case .oldValue:
             status.input = .myValue
             status.doneOperation = false
             resultLabel.text = "\(sender.tag)"
 
-        case .myValue:
+        case .result , .myValue:
             
             if inputValue.range(of:"-") != nil {
                 resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
