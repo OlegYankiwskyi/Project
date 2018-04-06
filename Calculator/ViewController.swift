@@ -89,20 +89,19 @@ class ViewController: UIViewController {
         switch sender.tag {
             case MathOperation.plus.rawValue:
                 status.oldOperation = .plus
-                operationLabel.text = "+"
+                cleanOperationLabel(operation: "+")
             
             case MathOperation.minus.rawValue:
                 status.oldOperation = .minus
-                operationLabel.text = "-"
-            
+                cleanOperationLabel(operation: "-")
             case MathOperation.multiplication.rawValue:
                 status.oldOperation = .multiplication
-                operationLabel.text = "*"
-            
+                cleanOperationLabel(operation: "*")
+
             case MathOperation.division.rawValue:
                 status.oldOperation = .division
-                operationLabel.text = "/"
-            
+                cleanOperationLabel(operation: "/")
+
             default:
                 return
         }
@@ -141,7 +140,7 @@ class ViewController: UIViewController {
             return
         }
         calculate(newValue: inputValue)
-        operationLabel.text = ""
+        cleanOperationLabel()
     }
 
     
@@ -169,7 +168,7 @@ class ViewController: UIViewController {
     @IBAction func onButtonReset(_ sender: UIButton) {
         cleanLable()
         status.reset()
-        operationLabel.text = ""
+        cleanOperationLabel()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
         cleanLable()
@@ -199,6 +198,9 @@ class ViewController: UIViewController {
     
     func cleanLable() {
         resultLabel.text = "0"
+    }
+    func cleanOperationLabel(operation: String = "") {
+        operationLabel.text = operation
     }
 }
 
