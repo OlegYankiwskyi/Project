@@ -48,7 +48,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
-    
+    // add computed property get set labelResult
     var status = Status()
     
     
@@ -63,7 +63,7 @@ class ViewController: UIViewController {
             resultLabel.text = "\(sender.tag)"
             return
         }
-        else if inputValue == "-0" {
+        else if inputValue == "-0" {//FIX ME : addMetod for checking
             resultLabel.text = "-\(sender.tag)"
             return
         }
@@ -90,16 +90,16 @@ class ViewController: UIViewController {
         
         switch sender.tag {
         case MathOperation.cosine.rawValue:
-            result = cos(inputValue * Double.pi / 180)
+            result = cos(inputValue * .pi / 180)
             
         case MathOperation.sinus.rawValue:
-            result = sin(inputValue * Double.pi / 180)
+            result = sin(inputValue * .pi / 180)
 
         case MathOperation.tangent.rawValue:
-            result = tan(inputValue * Double.pi / 180)
+            result = tan(inputValue * .pi / 180)
 
         case MathOperation.cotangent.rawValue:
-            result = pow(tan(inputValue * Double.pi / 180),-1)
+            result = pow(tan(inputValue * .pi / 180),-1)
 
         case MathOperation.squareNumber.rawValue:
             result = pow(inputValue,2)
@@ -114,7 +114,7 @@ class ViewController: UIViewController {
         default:
             return
         }
-        resultLabel.text = result.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", result) : String(result)
+        resultLabel.text = result.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", result) : String(result) //FIXME : add Func parse
 
     }
     
@@ -125,30 +125,34 @@ class ViewController: UIViewController {
             return
         }
 
-        if status.doneOperation == false {
+        if !status.doneOperation {
             calculate(newValue: newValue)
         } else {
             status.input = .oldValue
             status.oldResult = newValue
         }
 
-        switch sender.tag {
-        case MathOperation.plus.rawValue:
+        guard let operationType = MathOperation(rawValue: sender.tag) else {
+            return
+        }
+        
+        switch operationType {
+        case MathOperation.plus:
             status.oldOperation = .plus
-            cleanOperationLabel(operation: "+")
+            cleanOperationLabel(operation: "+")//FIXME add func no parametr func changeOperation(){ status.oldOperation = .plus}
             
-        case MathOperation.minus.rawValue:
+        case MathOperation.minus:
             status.oldOperation = .minus
             cleanOperationLabel(operation: "-")
-        case MathOperation.multiplication.rawValue:
+        case MathOperation.multiplication:
             status.oldOperation = .multiplication
             cleanOperationLabel(operation: "*")
             
-        case MathOperation.division.rawValue:
+        case MathOperation.division:
             status.oldOperation = .division
             cleanOperationLabel(operation: "/")
         
-        case MathOperation.power.rawValue:
+        case MathOperation.power:
             status.oldOperation = .power
             cleanOperationLabel(operation: "xʸ")
 
@@ -173,7 +177,7 @@ class ViewController: UIViewController {
 
         case .result , .myValue:
             
-            if inputValue.contains("-") {
+            if inputValue.contains("-") { //add func check Sign
                 resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
             } else {
                 resultLabel.text = "-" + inputValue
@@ -221,29 +225,29 @@ class ViewController: UIViewController {
         cleanLable()
     }
     
-    func calculate(newValue: Double) {
+    func calculate(newValue: Double) { // create two function result(oldValue , newValue , operation ) ,
         var newValue = newValue
-        print(status)
 
-        switch status.oldOperation {
-        case .plus:
-            newValue = status.oldResult + newValue
-            
-        case .minus:
-            newValue = status.oldResult - newValue
-            
-        case .multiplication:
-            newValue = status.oldResult * newValue
-            
-        case .division:
-            newValue = status.oldResult / newValue
-            
-        case .power:
-            newValue = pow(status.oldResult,newValue)
-
-        default:
-            return
-        }
+//        switch status.oldOperation {
+//        case .plus:
+//            newValue = status.oldResult + newValue
+//
+//        case .minus:
+//            newValue = status.oldResult - newValue
+//
+//        case .multiplication:
+//            newValue = status.oldResult * newValue
+//
+//        case .division:
+//            newValue = status.oldResult / newValue
+//
+//        case .power:
+//            newValue = pow(status.oldResult,newValue)
+//
+//        default:
+//            return
+//        }
+        //value = result(status.oldValue,newValue,status.operation)
 
         status.oldResult = newValue
         status.doneOperation = true
@@ -252,9 +256,11 @@ class ViewController: UIViewController {
     }
     
     func cleanLable() {
-        resultLabel.text = "0"
+        resultLabel.text = "0" // add computed property get set labelResult
     }
-    func cleanOperationLabel(operation: String = "") {
+    
+    
+    func cleanOperationLabel(operation: String = "") { //FIX ME rename setOperationLable
         operationLabel.text = operation
     }
 
