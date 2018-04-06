@@ -10,10 +10,18 @@ import UIKit
 
 enum MathOperation: Int {
     case none = 99,
-     plus,
-     minus,
-     multiplication,
-     division
+    plus,
+    minus,
+    multiplication,
+    division,
+    cosine,
+    sinus,
+    tangent,
+    cotangent,
+    squareNumber,
+    cubeNumber,
+    power,
+    exponentPower
 }
 
 enum Input {
@@ -72,13 +80,51 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func onButtonOpetation(_ sender: UIButton) {
-        guard let inputValue = resultLabel.text, !inputValue.isEmpty, let newValue = Double(inputValue) else {
+    @IBAction func onUnarOperation(_ sender: UIButton) {
+        guard let inputValue = Double(resultLabel.text!) else {
             cleanLable()
             status.reset()
             return
         }
+        var result = 0.0
         
+        switch sender.tag {
+        case MathOperation.cosine.rawValue:
+            result = cos(inputValue * Double.pi / 180)
+            
+        case MathOperation.sinus.rawValue:
+            result = sin(inputValue * Double.pi / 180)
+
+        case MathOperation.tangent.rawValue:
+            result = tan(inputValue * Double.pi / 180)
+
+        case MathOperation.cotangent.rawValue:
+            result = pow(tan(inputValue * Double.pi / 180),-1)
+
+        case MathOperation.squareNumber.rawValue:
+            result = pow(inputValue,2)
+
+        case MathOperation.cubeNumber.rawValue:
+            result = pow(inputValue,3)
+        
+        case MathOperation.exponentPower.rawValue:
+            let exponent = 2.71828182846
+            result = pow(exponent,inputValue)
+        
+        default:
+            return
+        }
+        resultLabel.text = result.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", result) : String(result)
+
+    }
+    
+    @IBAction func onBinarOpetation(_ sender: UIButton) {
+        guard let newValue = Double(resultLabel.text!) else {
+            cleanLable()
+            status.reset()
+            return
+        }
+
         if status.doneOperation == false {
             calculate(newValue: newValue)
         } else {
@@ -87,25 +133,28 @@ class ViewController: UIViewController {
         }
 
         switch sender.tag {
-            case MathOperation.plus.rawValue:
-                status.oldOperation = .plus
-                cleanOperationLabel(operation: "+")
+        case MathOperation.plus.rawValue:
+            status.oldOperation = .plus
+            cleanOperationLabel(operation: "+")
             
-            case MathOperation.minus.rawValue:
-                status.oldOperation = .minus
-                cleanOperationLabel(operation: "-")
-            case MathOperation.multiplication.rawValue:
-                status.oldOperation = .multiplication
-                cleanOperationLabel(operation: "*")
-
-            case MathOperation.division.rawValue:
-                status.oldOperation = .division
-                cleanOperationLabel(operation: "/")
-
-            default:
-                return
-        }
+        case MathOperation.minus.rawValue:
+            status.oldOperation = .minus
+            cleanOperationLabel(operation: "-")
+        case MathOperation.multiplication.rawValue:
+            status.oldOperation = .multiplication
+            cleanOperationLabel(operation: "*")
+            
+        case MathOperation.division.rawValue:
+            status.oldOperation = .division
+            cleanOperationLabel(operation: "/")
         
+        case MathOperation.power.rawValue:
+            status.oldOperation = .power
+            cleanOperationLabel(operation: "xʸ")
+
+        default:
+            return
+        }
     }
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
@@ -131,8 +180,6 @@ class ViewController: UIViewController {
             }
             
         }
-        
-        
     }
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
@@ -176,16 +223,24 @@ class ViewController: UIViewController {
     
     func calculate(newValue: Double) {
         var newValue = newValue
-        
+        print(status)
+
         switch status.oldOperation {
         case .plus:
             newValue = status.oldResult + newValue
+            
         case .minus:
             newValue = status.oldResult - newValue
+            
         case .multiplication:
             newValue = status.oldResult * newValue
+            
         case .division:
             newValue = status.oldResult / newValue
+            
+        case .power:
+            newValue = pow(status.oldResult,newValue)
+
         default:
             return
         }
@@ -193,7 +248,7 @@ class ViewController: UIViewController {
         status.oldResult = newValue
         status.doneOperation = true
         status.input = .result
-        resultLabel.text = newValue .truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", newValue) : String(newValue)
+        resultLabel.text = newValue.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", newValue) : String(newValue)
     }
     
     func cleanLable() {
@@ -202,5 +257,6 @@ class ViewController: UIViewController {
     func cleanOperationLabel(operation: String = "") {
         operationLabel.text = operation
     }
+
 }
 
