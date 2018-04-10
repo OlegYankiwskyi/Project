@@ -49,22 +49,33 @@ class ViewController: UIViewController {
     @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
     // add computed property get set labelResult
+    
+    var mainLable: String? {
+        get {
+            return resultLabel.text
+        }
+        set {
+            resultLabel.text = newValue
+        }
+    }
+    
     var status = Status()
     
     
     @IBAction func onButtonDigit(_ sender: UIButton) {
-        guard let inputValue = resultLabel.text else {
+        guard let inputValue = mainLable else {
             cleanLable()
             status.reset()
+            setOperationLable()
             return
         }
         
         if inputValue == "0" {
-            resultLabel.text = "\(sender.tag)"
+            mainLable = "\(sender.tag)"
             return
         }
         else if inputValue == "-0" {//FIX ME : addMetod for checking
-            resultLabel.text = "-\(sender.tag)"
+            mainLable = "-\(sender.tag)"
             return
         }
         
@@ -73,55 +84,56 @@ class ViewController: UIViewController {
             case .result , .oldValue:
                 status.input = .myValue
                 status.doneOperation = false
-                resultLabel.text = "\(sender.tag)"
+                mainLable = "\(sender.tag)"
             
             case .myValue:
-                resultLabel.text = inputValue + "\(sender.tag)"
+                mainLable = inputValue + "\(sender.tag)"
         }
     }
     
     @IBAction func onUnarOperation(_ sender: UIButton) {
-        guard let inputValue = Double(resultLabel.text!) else {
+        guard let inputValue = mainLable , let newValue = Double(inputValue) else {
             cleanLable()
             status.reset()
+            setOperationLable()
             return
         }
         var result = 0.0
         
         switch sender.tag {
         case MathOperation.cosine.rawValue:
-            result = cos(inputValue * .pi / 180)
+            result = cos(newValue * .pi / 180)
             
         case MathOperation.sinus.rawValue:
-            result = sin(inputValue * .pi / 180)
+            result = sin(newValue * .pi / 180)
 
         case MathOperation.tangent.rawValue:
-            result = tan(inputValue * .pi / 180)
+            result = tan(newValue * .pi / 180)
 
         case MathOperation.cotangent.rawValue:
-            result = pow(tan(inputValue * .pi / 180),-1)
+            result = pow(tan(newValue * .pi / 180),-1)
 
         case MathOperation.squareNumber.rawValue:
-            result = pow(inputValue,2)
+            result = pow(newValue,2)
 
         case MathOperation.cubeNumber.rawValue:
-            result = pow(inputValue,3)
+            result = pow(newValue,3)
         
         case MathOperation.exponentPower.rawValue:
             let exponent = 2.71828182846
-            result = pow(exponent,inputValue)
+            result = pow(exponent,newValue)
         
         default:
             return
         }
-        resultLabel.text = result.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", result) : String(result) //FIXME : add Func parse
-
+        mainLable = parseToString(value: result)
     }
     
     @IBAction func onBinarOpetation(_ sender: UIButton) {
-        guard let newValue = Double(resultLabel.text!) else {
+        guard let inputValue = mainLable, let newValue = Double(inputValue) else {
             cleanLable()
             status.reset()
+            setOperationLable()
             return
         }
 
@@ -137,32 +149,34 @@ class ViewController: UIViewController {
         }
         
         switch operationType {
-        case MathOperation.plus:
-            status.oldOperation = .plus
-            cleanOperationLabel(operation: "+")//FIXME add func no parametr func changeOperation(){ status.oldOperation = .plus}
+            case MathOperation.plus:
+                status.oldOperation = .plus
+                setOperationLable(operation: "+")//FIXME add func no parametr func changeOperation(){ status.oldOperation = .plus}
             
-        case MathOperation.minus:
-            status.oldOperation = .minus
-            cleanOperationLabel(operation: "-")
-        case MathOperation.multiplication:
-            status.oldOperation = .multiplication
-            cleanOperationLabel(operation: "*")
+            case MathOperation.minus:
+                status.oldOperation = .minus
+                setOperationLable(operation: "-")
             
-        case MathOperation.division:
-            status.oldOperation = .division
-            cleanOperationLabel(operation: "/")
-        
-        case MathOperation.power:
-            status.oldOperation = .power
-            cleanOperationLabel(operation: "xʸ")
+            case MathOperation.multiplication:
+                status.oldOperation = .multiplication
+                setOperationLable(operation: "*")
+            
+            case MathOperation.division:
+                status.oldOperation = .division
+                setOperationLable(operation: "/")
+            
+            case MathOperation.power:
+                status.oldOperation = .power
+                setOperationLable(operation: "xʸ")
 
-        default:
-            return
+            default:
+                return
         }
     }
+
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
-        guard let inputValue = resultLabel.text else {
+        guard let inputValue = mainLable else {
             cleanLable()
             status.reset()
             return
@@ -173,32 +187,40 @@ class ViewController: UIViewController {
         case .oldValue:
             status.input = .myValue
             status.doneOperation = false
-            resultLabel.text = "\(sender.tag)"
+            mainLable = "\(sender.tag)"
 
         case .result , .myValue:
             
-            if inputValue.contains("-") { //add func check Sign
-                resultLabel.text = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
+            if hasMinus(value: inputValue) {
+                mainLable = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
             } else {
-                resultLabel.text = "-" + inputValue
+                mainLable = "-" + inputValue
             }
-            
+        }
+    }
+    
+    func hasMinus(value: String) -> Bool {
+        if value.contains("-") {
+            return true
+        } else {
+            return false
         }
     }
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
-        guard let inputValue = Double(resultLabel.text!) , !status.doneOperation else {
+        guard let inputValue = mainLable, let newValue = Double(inputValue) , !status.doneOperation else {
             return
         }
-        calculate(newValue: inputValue)
-        cleanOperationLabel()
+        calculate(newValue: newValue)
+        setOperationLable()
     }
 
     
     @IBAction func onButtonDot(_ sender: UIButton) {
-        guard let inputValue = resultLabel.text, !inputValue.isEmpty else {
+        guard let inputValue = mainLable, !inputValue.isEmpty else {
             cleanLable()
             status.reset()
+            setOperationLable()
             return
         }
         
@@ -207,11 +229,11 @@ class ViewController: UIViewController {
         case .result , .oldValue:
             status.input = .myValue
             status.doneOperation = false
-            resultLabel.text = "0."
+            mainLable = "0."
             
         case .myValue:
             if !inputValue.contains(".") {
-                resultLabel.text = inputValue + "."
+                mainLable = inputValue + "."
             }
         }
     }
@@ -219,48 +241,59 @@ class ViewController: UIViewController {
     @IBAction func onButtonReset(_ sender: UIButton) {
         cleanLable()
         status.reset()
-        cleanOperationLabel()
+        setOperationLable()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
         cleanLable()
     }
     
+    func result(newValue: Double) -> Double? {
+
+        switch status.oldOperation {
+            case .plus:
+                return status.oldResult + newValue
+            
+            case .minus:
+                return status.oldResult - newValue
+            
+            case .multiplication:
+                return status.oldResult * newValue
+            
+            case .division:
+                return status.oldResult / newValue
+            
+            case .power:
+                return pow(status.oldResult,newValue)
+            
+            default:
+                return nil
+        }
+    }
+    
     func calculate(newValue: Double) { // create two function result(oldValue , newValue , operation ) ,
-        var newValue = newValue
 
-//        switch status.oldOperation {
-//        case .plus:
-//            newValue = status.oldResult + newValue
-//
-//        case .minus:
-//            newValue = status.oldResult - newValue
-//
-//        case .multiplication:
-//            newValue = status.oldResult * newValue
-//
-//        case .division:
-//            newValue = status.oldResult / newValue
-//
-//        case .power:
-//            newValue = pow(status.oldResult,newValue)
-//
-//        default:
-//            return
-//        }
-        //value = result(status.oldValue,newValue,status.operation)
-
-        status.oldResult = newValue
-        status.doneOperation = true
-        status.input = .result
-        resultLabel.text = newValue.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", newValue) : String(newValue)
+        if let value = result(newValue: newValue) {
+            status.oldResult = value
+            status.doneOperation = true
+            status.input = .result
+            mainLable = parseToString(value: value)
+        } else {
+            cleanLable()
+            status.reset()
+            setOperationLable()
+        }
+    }
+    
+    func parseToString(value: Double) -> String {
+        return value.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", value) : String(value)
     }
     
     func cleanLable() {
-        resultLabel.text = "0" // add computed property get set labelResult
+        mainLable = "0" // add computed property get set labelResult
     }
     
     
-    func cleanOperationLabel(operation: String = "") { //FIX ME rename setOperationLable
+    func setOperationLable(operation: String = "") { //FIX ME rename setOperationLable
         operationLabel.text = operation
     }
 
