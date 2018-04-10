@@ -92,9 +92,8 @@ class ViewController: UIViewController {
             return
         }
 
-        
-        switch status.input {
-            
+        switch status.input
+        {
         case .result , .oldValue:
             status.input = .myValue
             status.doneOperation = false
@@ -119,7 +118,8 @@ class ViewController: UIViewController {
             return
         }
         
-        switch operationType {
+        switch operationType
+        {
         case MathOperation.cosine:
             result = cos(newValue * .pi / 180)
             
@@ -175,11 +175,12 @@ class ViewController: UIViewController {
         guard let inputValue = displayInput else {
             cleanLabel()
             status.reset()
+            setOperation()
             return
         }
         
-        switch status.input {
-            
+        switch status.input
+        {
         case .oldValue:
             status.input = .myValue
             status.doneOperation = false
@@ -209,7 +210,8 @@ class ViewController: UIViewController {
     
     func result(newValue: Double) -> Double? {
         
-        switch status.oldOperation {
+        switch status.oldOperation
+        {
         case .plus:
             return status.oldResult + newValue
             
@@ -245,7 +247,7 @@ class ViewController: UIViewController {
     }
     
     func parseToString(value: Double) -> String {
-        return value.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", value) : String(value)
+        return value.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%g", value) : String(value)
     }
     
     func cleanLabel() {
