@@ -24,8 +24,7 @@ enum MathOperation: Int {
     exponentPower
     
     var stringRepresentation: String {
-        switch self
-        {
+        switch self {
         case .plus:
             return "+"
         case .minus:
@@ -51,13 +50,13 @@ enum Input {
 struct Status {
     var oldResult = 0.0
     var oldOperation: MathOperation = .none
-    var doneOperation = true
+    var isOperationDone = true
     var input: Input = .myValue
     
     mutating func reset() {
         oldResult = 0.0
         oldOperation = .none
-        doneOperation = true
+        isOperationDone = true
         input = .myValue
     }
 }
@@ -92,11 +91,10 @@ class ViewController: UIViewController {
             return
         }
 
-        switch status.input
-        {
+        switch status.input  {
         case .result , .oldValue:
-            status.input = .myValue
-            status.doneOperation = false
+            status.input = .myValue // new Value
+            status.isOperationDone = false
             displayInput = Double(sender.tag)
             
         case .myValue:
@@ -118,27 +116,26 @@ class ViewController: UIViewController {
             return
         }
         
-        switch operationType
-        {
-        case MathOperation.cosine:
+        switch operationType {
+        case .cosine:
             result = cos(newValue * .pi / 180)
             
-        case MathOperation.sinus:
+        case .sinus:
             result = sin(newValue * .pi / 180)
             
-        case MathOperation.tangent:
+        case .tangent:
             result = tan(newValue * .pi / 180)
             
-        case MathOperation.cotangent:
+        case .cotangent:
             result = pow(tan(newValue * .pi / 180),-1)
             
-        case MathOperation.squareNumber:
+        case .squareNumber:
             result = pow(newValue,2)
             
-        case MathOperation.cubeNumber:
+        case .cubeNumber:
             result = pow(newValue,3)
             
-        case MathOperation.exponentPower:
+        case .exponentPower:
             let exponent = 2.71828182846
             result = pow(exponent,newValue)
             
@@ -156,18 +153,16 @@ class ViewController: UIViewController {
             return
         }
         
-        if !status.doneOperation {
-            calculate(newValue: newValue)
+        if !status.isOperationDone {
+            updateCalculation(newValue: newValue)
         } else {
             status.input = .oldValue
             status.oldResult = newValue
         }
         
-        guard let operationType = MathOperation(rawValue: sender.tag) else {
-            return
+        if let operationType = MathOperation(rawValue: sender.tag) {
+            setOperation(operation: operationType)
         }
-        
-        setOperation(operation: operationType)
         
     }
     
@@ -179,11 +174,10 @@ class ViewController: UIViewController {
             return
         }
         
-        switch status.input
-        {
+        switch status.input {
         case .oldValue:
             status.input = .myValue
-            status.doneOperation = false
+            status.isOperationDone = false
             displayInput = Double(sender.tag)
             
         case .result , .myValue:
@@ -192,10 +186,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
-        guard let newValue = displayInput, !status.doneOperation else {
+        guard let newValue = displayInput, !status.isOperationDone else {
             return
         }
-        calculate(newValue: newValue)
+        updateCalculation(newValue: newValue)
         setOperation()
     }
     
@@ -209,38 +203,38 @@ class ViewController: UIViewController {
         cleanLabel()
     }
     
-    func result(newValue: Double) -> Double? {
+    func count(newValue: Double, oldValue: Double, operation: MathOperation) -> Double? {
         
-        switch status.oldOperation
-        {
+        switch operation {
         case .plus:
-            return status.oldResult + newValue
+            return oldValue + newValue
             
         case .minus:
-            return status.oldResult - newValue
+            return oldValue - newValue
             
         case .multiplication:
-            return status.oldResult * newValue
+            return oldValue * newValue
             
         case .division:
-            return status.oldResult / newValue
+            return oldValue / newValue
             
         case .power:
-            return pow(status.oldResult,newValue)
+            return pow(oldValue,newValue)
             
         default:
             return nil
         }
     }
     
-    func calculate(newValue: Double) {
+    func updateCalculation(newValue: Double) {
         
-        if let value = result(newValue: newValue) {
-            status.oldResult = value
-            status.doneOperation = true
+        if let result = count(newValue: newValue, oldValue: status.oldResult, operation: status.oldOperation) {
+            status.oldResult = result
+            status.isOperationDone = true
             status.input = .result
-            displayInput = value
-        } else {
+            displayInput = result
+        }
+        else {
             cleanLabel()
             status.reset()
             setOperation()
@@ -255,7 +249,7 @@ class ViewController: UIViewController {
         displayInput = 0.0
     }
     
-    func setOperation(operation: MathOperation = MathOperation.none) {
+    func setOperation(operation: MathOperation = .none) {
         status.oldOperation = operation
         operationLabel.text = operation.stringRepresentation
     }
