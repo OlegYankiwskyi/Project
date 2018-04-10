@@ -49,7 +49,7 @@ enum MathOperation: Int {
 
 enum Input {
     case result
-    case myValue
+    case newValue
     case oldValue
 }
 
@@ -57,13 +57,13 @@ struct Status {
     var oldResult = 0.0
     var oldOperation: MathOperation = .none
     var isOperationDone = true
-    var input: Input = .myValue
+    var input: Input = .newValue
     
     mutating func reset() {
         oldResult = 0.0
         oldOperation = .none
         isOperationDone = true
-        input = .myValue
+        input = .newValue
     }
 }
 
@@ -99,11 +99,11 @@ class ViewController: UIViewController {
 
         switch status.input  {
         case .result , .oldValue:
-            status.input = .myValue // new Value
+            status.input = .newValue
             status.isOperationDone = false
             displayInput = Double(sender.tag)
             
-        case .myValue:
+        case .newValue:
             displayInput = inputValue * 10 + Double(sender.tag)
         }
     }
@@ -182,11 +182,11 @@ class ViewController: UIViewController {
         
         switch status.input {
         case .oldValue:
-            status.input = .myValue
+            status.input = .newValue
             status.isOperationDone = false
             displayInput = Double(sender.tag)
             
-        case .result , .myValue:
+        case .result , .newValue:
             displayInput = inputValue * -1.0
         }
     }
