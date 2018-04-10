@@ -9,7 +9,7 @@
 import UIKit
 
 extension Double {
-    func parseToString() -> String {
+    func convertToString() -> String {
         return self.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%g", self) : String(self)
     }
 }
@@ -82,18 +82,16 @@ class ViewController: UIViewController {
         }
         set {
             if let value = newValue {
-                resultLabel.text = value.parseToString()
+                resultLabel.text = value.convertToString()
             }
         }
     }
     
     var status = Status()
     
-    @IBAction func onButtonDigit(_ sender: UIButton) {
+    @IBAction func digitButtonAction(_ sender: UIButton) {
         guard let inputValue = displayInput else {
-            cleanLabel()
-            status.reset()
-            setOperation()
+            reset()
             return
         }
 
@@ -110,52 +108,42 @@ class ViewController: UIViewController {
 
     
     @IBAction func onUnarOperation(_ sender: UIButton) {
-        guard let newValue = displayInput else {
-            cleanLabel()
-            status.reset()
-            setOperation()
-            return
-        }
-        var result = 0.0
-        
-        guard let operationType = MathOperation(rawValue: sender.tag) else {
+        guard let newValue = displayInput, let operationType = MathOperation(rawValue: sender.tag) else {
+            reset()
             return
         }
         
         switch operationType {
         case .cosine:
-            result = cos(newValue * .pi / 180)
+            displayInput = cos(newValue * .pi / 180)
             
         case .sinus:
-            result = sin(newValue * .pi / 180)
+            displayInput = sin(newValue * .pi / 180)
             
         case .tangent:
-            result = tan(newValue * .pi / 180)
+            displayInput = tan(newValue * .pi / 180)
             
         case .cotangent:
-            result = pow(tan(newValue * .pi / 180),-1)
+            displayInput = pow(tan(newValue * .pi / 180),-1)
             
         case .squareNumber:
-            result = pow(newValue,2)
+            displayInput = pow(newValue,2)
             
         case .cubeNumber:
-            result = pow(newValue,3)
+            displayInput = pow(newValue,3)
             
         case .exponentPower:
             let exponent = 2.71828182846
-            result = pow(exponent,newValue)
+            displayInput = pow(exponent,newValue)
             
         default:
             return
         }
-        displayInput = result
     }
     
     @IBAction func onBinarOpetation(_ sender: UIButton) {
         guard let newValue = displayInput else {
-            cleanLabel()
-            status.reset()
-            setOperation()
+            reset()
             return
         }
         
@@ -174,9 +162,7 @@ class ViewController: UIViewController {
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
         guard let inputValue = displayInput else {
-            cleanLabel()
-            status.reset()
-            setOperation()
+            reset()
             return
         }
         
@@ -200,9 +186,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onButtonReset(_ sender: UIButton) {
-        cleanLabel()
-        status.reset()
-        setOperation()
+        reset()
     }
     
     @IBAction func onButtonClear(_ sender: UIButton) {
@@ -241,9 +225,7 @@ class ViewController: UIViewController {
             displayInput = result
         }
         else {
-            cleanLabel()
-            status.reset()
-            setOperation()
+            reset()
         }
     }
     
@@ -254,6 +236,12 @@ class ViewController: UIViewController {
     func setOperation(operation: MathOperation = .none) {
         status.oldOperation = operation
         operationLabel.text = operation.stringRepresentation
+    }
+    
+    func reset() {
+        cleanLabel()
+        status.reset()
+        setOperation()
     }
 }
 
