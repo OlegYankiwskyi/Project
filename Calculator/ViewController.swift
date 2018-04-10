@@ -204,6 +204,7 @@ class ViewController: UIViewController {
         status.reset()
         setOperation()
     }
+    
     @IBAction func onButtonClear(_ sender: UIButton) {
         cleanLabel()
     }
