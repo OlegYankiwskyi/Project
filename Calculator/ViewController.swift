@@ -8,6 +8,12 @@
 
 import UIKit
 
+extension Double {
+    func parseToString() -> String {
+        return self.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%g", self) : String(self)
+    }
+}
+
 enum MathOperation: Int {
     case none = 99,
     plus,
@@ -76,7 +82,7 @@ class ViewController: UIViewController {
         }
         set {
             if let value = newValue {
-                resultLabel.text = parseToString(value: value)
+                resultLabel.text = value.parseToString()
             }
         }
     }
@@ -241,10 +247,6 @@ class ViewController: UIViewController {
         }
     }
     
-    func parseToString(value: Double) -> String {
-        return value.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%g", value) : String(value)
-    }
-    
     func cleanLabel() {
         displayInput = 0.0
     }
@@ -254,4 +256,6 @@ class ViewController: UIViewController {
         operationLabel.text = operation.stringRepresentation
     }
 }
+
+
 
