@@ -67,32 +67,28 @@ class ViewController: UIViewController {
     @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
     
-    var mainLable: String? {
+    var displayInput: Double? {
         get {
-            return resultLabel.text
+            if let input = resultLabel.text , let result = Double(input) {
+                return result
+            } else {
+                return nil
+            }
         }
         set {
-            resultLabel.text = newValue
+            if let value = newValue {
+                resultLabel.text = parseToString(value: value)
+            }
         }
     }
     
     var status = Status()
     
-    
     @IBAction func onButtonDigit(_ sender: UIButton) {
-        guard let inputValue = mainLable else {
-            cleanLable()
+        guard let inputValue = displayInput else {
+            cleanLabel()
             status.reset()
             setOperation()
-            return
-        }
-        
-        if inputValue == "0" {
-            mainLable = "\(sender.tag)"
-            return
-        }
-        else if inputValue == "-0" {//FIX ME : addMetod for checking
-            mainLable = "-\(sender.tag)"
             return
         }
 
@@ -102,16 +98,17 @@ class ViewController: UIViewController {
         case .result , .oldValue:
             status.input = .myValue
             status.doneOperation = false
-            mainLable = "\(sender.tag)"
+            displayInput = Double(sender.tag)
             
         case .myValue:
-            mainLable = inputValue + "\(sender.tag)"
+            displayInput = inputValue * 10 + Double(sender.tag)
         }
     }
+
     
     @IBAction func onUnarOperation(_ sender: UIButton) {
-        guard let inputValue = mainLable , let newValue = Double(inputValue) else {
-            cleanLable()
+        guard let newValue = displayInput else {
+            cleanLabel()
             status.reset()
             setOperation()
             return
@@ -148,12 +145,12 @@ class ViewController: UIViewController {
         default:
             return
         }
-        mainLable = parseToString(value: result)
+        displayInput = result
     }
     
     @IBAction func onBinarOpetation(_ sender: UIButton) {
-        guard let inputValue = mainLable, let newValue = Double(inputValue) else {
-            cleanLable()
+        guard let newValue = displayInput else {
+            cleanLabel()
             status.reset()
             setOperation()
             return
@@ -175,8 +172,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
-        guard let inputValue = mainLable else {
-            cleanLable()
+        guard let inputValue = displayInput else {
+            cleanLabel()
             status.reset()
             return
         }
@@ -186,64 +183,28 @@ class ViewController: UIViewController {
         case .oldValue:
             status.input = .myValue
             status.doneOperation = false
-            mainLable = "\(sender.tag)"
+            displayInput = Double(sender.tag)
             
         case .result , .myValue:
-            
-            if hasMinus(value: inputValue) {
-                mainLable = inputValue.replacingOccurrences(of: "-", with: "", options: .literal, range: nil)
-            } else {
-                mainLable = "-" + inputValue
-            }
-        }
-    }
-    
-    func hasMinus(value: String) -> Bool {
-        if value.contains("-") {
-            return true
-        } else {
-            return false
+            displayInput = inputValue * -1.0
         }
     }
     
     @IBAction func onButtonEqual(_ sender: UIButton) {
-        guard let inputValue = mainLable, let newValue = Double(inputValue) , !status.doneOperation else {
+        guard let newValue = displayInput, !status.doneOperation else {
             return
         }
         calculate(newValue: newValue)
         setOperation()
     }
     
-    
-    @IBAction func onButtonDot(_ sender: UIButton) {
-        guard let inputValue = mainLable, !inputValue.isEmpty else {
-            cleanLable()
-            status.reset()
-            setOperation()
-            return
-        }
-        
-        switch status.input {
-            
-        case .result , .oldValue:
-            status.input = .myValue
-            status.doneOperation = false
-            mainLable = "0."
-            
-        case .myValue:
-            if !inputValue.contains(".") {
-                mainLable = inputValue + "."
-            }
-        }
-    }
-    
     @IBAction func onButtonReset(_ sender: UIButton) {
-        cleanLable()
+        cleanLabel()
         status.reset()
         setOperation()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
-        cleanLable()
+        cleanLabel()
     }
     
     func result(newValue: Double) -> Double? {
@@ -275,9 +236,9 @@ class ViewController: UIViewController {
             status.oldResult = value
             status.doneOperation = true
             status.input = .result
-            mainLable = parseToString(value: value)
+            displayInput = value
         } else {
-            cleanLable()
+            cleanLabel()
             status.reset()
             setOperation()
         }
@@ -287,8 +248,8 @@ class ViewController: UIViewController {
         return value.truncatingRemainder(dividingBy: 1.0) == 0 ? String(format: "%.0f", value) : String(value)
     }
     
-    func cleanLable() {
-        mainLable = "0"
+    func cleanLabel() {
+        displayInput = 0.0
     }
     
     func setOperation(operation: MathOperation = MathOperation.none) {
