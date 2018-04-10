@@ -22,6 +22,24 @@ enum MathOperation: Int {
     cubeNumber,
     power,
     exponentPower
+    
+    var stringRepresentation: String {
+        switch self
+        {
+        case .plus:
+            return "+"
+        case .minus:
+            return "-"
+        case .multiplication:
+            return "*"
+        case .division:
+            return "/"
+        case .power:
+            return "xʸ"
+        default:
+            return ""
+        }
+    }
 }
 
 enum Input {
@@ -45,10 +63,9 @@ struct Status {
 }
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
-    // add computed property get set labelResult
     
     var mainLable: String? {
         get {
@@ -66,7 +83,7 @@ class ViewController: UIViewController {
         guard let inputValue = mainLable else {
             cleanLable()
             status.reset()
-            setOperationLable()
+            setOperation()
             return
         }
         
@@ -78,16 +95,17 @@ class ViewController: UIViewController {
             mainLable = "-\(sender.tag)"
             return
         }
+
         
         switch status.input {
             
-            case .result , .oldValue:
-                status.input = .myValue
-                status.doneOperation = false
-                mainLable = "\(sender.tag)"
+        case .result , .oldValue:
+            status.input = .myValue
+            status.doneOperation = false
+            mainLable = "\(sender.tag)"
             
-            case .myValue:
-                mainLable = inputValue + "\(sender.tag)"
+        case .myValue:
+            mainLable = inputValue + "\(sender.tag)"
         }
     }
     
@@ -95,34 +113,38 @@ class ViewController: UIViewController {
         guard let inputValue = mainLable , let newValue = Double(inputValue) else {
             cleanLable()
             status.reset()
-            setOperationLable()
+            setOperation()
             return
         }
         var result = 0.0
         
-        switch sender.tag {
-        case MathOperation.cosine.rawValue:
+        guard let operationType = MathOperation(rawValue: sender.tag) else {
+            return
+        }
+        
+        switch operationType {
+        case MathOperation.cosine:
             result = cos(newValue * .pi / 180)
             
-        case MathOperation.sinus.rawValue:
+        case MathOperation.sinus:
             result = sin(newValue * .pi / 180)
-
-        case MathOperation.tangent.rawValue:
+            
+        case MathOperation.tangent:
             result = tan(newValue * .pi / 180)
-
-        case MathOperation.cotangent.rawValue:
+            
+        case MathOperation.cotangent:
             result = pow(tan(newValue * .pi / 180),-1)
-
-        case MathOperation.squareNumber.rawValue:
+            
+        case MathOperation.squareNumber:
             result = pow(newValue,2)
-
-        case MathOperation.cubeNumber.rawValue:
+            
+        case MathOperation.cubeNumber:
             result = pow(newValue,3)
-        
-        case MathOperation.exponentPower.rawValue:
+            
+        case MathOperation.exponentPower:
             let exponent = 2.71828182846
             result = pow(exponent,newValue)
-        
+            
         default:
             return
         }
@@ -133,47 +155,24 @@ class ViewController: UIViewController {
         guard let inputValue = mainLable, let newValue = Double(inputValue) else {
             cleanLable()
             status.reset()
-            setOperationLable()
+            setOperation()
             return
         }
-
+        
         if !status.doneOperation {
             calculate(newValue: newValue)
         } else {
             status.input = .oldValue
             status.oldResult = newValue
         }
-
+        
         guard let operationType = MathOperation(rawValue: sender.tag) else {
             return
         }
         
-        switch operationType {
-            case MathOperation.plus:
-                status.oldOperation = .plus
-                setOperationLable(operation: "+")//FIXME add func no parametr func changeOperation(){ status.oldOperation = .plus}
-            
-            case MathOperation.minus:
-                status.oldOperation = .minus
-                setOperationLable(operation: "-")
-            
-            case MathOperation.multiplication:
-                status.oldOperation = .multiplication
-                setOperationLable(operation: "*")
-            
-            case MathOperation.division:
-                status.oldOperation = .division
-                setOperationLable(operation: "/")
-            
-            case MathOperation.power:
-                status.oldOperation = .power
-                setOperationLable(operation: "xʸ")
-
-            default:
-                return
-        }
+        setOperation(operation: operationType)
+        
     }
-
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
         guard let inputValue = mainLable else {
@@ -188,7 +187,7 @@ class ViewController: UIViewController {
             status.input = .myValue
             status.doneOperation = false
             mainLable = "\(sender.tag)"
-
+            
         case .result , .myValue:
             
             if hasMinus(value: inputValue) {
@@ -212,15 +211,15 @@ class ViewController: UIViewController {
             return
         }
         calculate(newValue: newValue)
-        setOperationLable()
+        setOperation()
     }
-
+    
     
     @IBAction func onButtonDot(_ sender: UIButton) {
         guard let inputValue = mainLable, !inputValue.isEmpty else {
             cleanLable()
             status.reset()
-            setOperationLable()
+            setOperation()
             return
         }
         
@@ -241,37 +240,37 @@ class ViewController: UIViewController {
     @IBAction func onButtonReset(_ sender: UIButton) {
         cleanLable()
         status.reset()
-        setOperationLable()
+        setOperation()
     }
     @IBAction func onButtonClear(_ sender: UIButton) {
         cleanLable()
     }
     
     func result(newValue: Double) -> Double? {
-
+        
         switch status.oldOperation {
-            case .plus:
-                return status.oldResult + newValue
+        case .plus:
+            return status.oldResult + newValue
             
-            case .minus:
-                return status.oldResult - newValue
+        case .minus:
+            return status.oldResult - newValue
             
-            case .multiplication:
-                return status.oldResult * newValue
+        case .multiplication:
+            return status.oldResult * newValue
             
-            case .division:
-                return status.oldResult / newValue
+        case .division:
+            return status.oldResult / newValue
             
-            case .power:
-                return pow(status.oldResult,newValue)
+        case .power:
+            return pow(status.oldResult,newValue)
             
-            default:
-                return nil
+        default:
+            return nil
         }
     }
     
-    func calculate(newValue: Double) { // create two function result(oldValue , newValue , operation ) ,
-
+    func calculate(newValue: Double) {
+        
         if let value = result(newValue: newValue) {
             status.oldResult = value
             status.doneOperation = true
@@ -280,7 +279,7 @@ class ViewController: UIViewController {
         } else {
             cleanLable()
             status.reset()
-            setOperationLable()
+            setOperation()
         }
     }
     
@@ -289,13 +288,12 @@ class ViewController: UIViewController {
     }
     
     func cleanLable() {
-        mainLable = "0" // add computed property get set labelResult
+        mainLable = "0"
     }
     
-    
-    func setOperationLable(operation: String = "") { //FIX ME rename setOperationLable
-        operationLabel.text = operation
+    func setOperation(operation: MathOperation = MathOperation.none) {
+        status.oldOperation = operation
+        operationLabel.text = operation.stringRepresentation
     }
-
 }
 
