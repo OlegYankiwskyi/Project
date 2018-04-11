@@ -14,6 +14,26 @@ extension Double {
     }
 }
 
+enum MathError: Error {
+    case infinity
+    case error
+    case badValueTangent
+    case badValueCotangent
+    
+    var description: String {
+        switch self {
+        case .infinity:
+            return "Error value is infinity"
+        case .error:
+            return "Error"
+        case .badValueTangent:
+            return "Error, bad value for tangent"
+        case .badValueCotangent:
+            return "Error, bad value for cotangent"
+        }
+    }
+}
+
 enum MathOperation: Int {
     case none = 99,
     plus,
@@ -71,6 +91,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var operationLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
+    var status = Status()
     
     var displayInput: Double? {
         get {
@@ -87,16 +108,18 @@ class ViewController: UIViewController {
         }
     }
     
-    var status = Status()
-    
     @IBAction func digitButtonAction(_ sender: UIButton) {
         guard let inputValue = displayInput else {
             reset()
             return
         }
-
+        
         switch status.input  {
-        case .result , .oldValue:
+        case .result:
+            status.input = .newValue
+            displayInput = Double(sender.tag)
+            
+        case .oldValue:
             status.input = .newValue
             status.isOperationDone = false
             displayInput = Double(sender.tag)
@@ -105,7 +128,7 @@ class ViewController: UIViewController {
             displayInput = inputValue * 10 + Double(sender.tag)
         }
     }
-
+    
     
     @IBAction func onUnarOperation(_ sender: UIButton) {
         guard let newValue = displayInput, let operationType = MathOperation(rawValue: sender.tag) else {
@@ -113,32 +136,23 @@ class ViewController: UIViewController {
             return
         }
         
-        switch operationType {
-        case .cosine:
-            displayInput = cos(newValue * .pi / 180)
-            
-        case .sinus:
-            displayInput = sin(newValue * .pi / 180)
-            
-        case .tangent:
-            displayInput = tan(newValue * .pi / 180)
-            
-        case .cotangent:
-            displayInput = pow(tan(newValue * .pi / 180),-1)
-            
-        case .squareNumber:
-            displayInput = pow(newValue,2)
-            
-        case .cubeNumber:
-            displayInput = pow(newValue,3)
-            
-        case .exponentPower:
-            let exponent = 2.71828182846
-            displayInput = pow(exponent,newValue)
-            
-        default:
-            return
+        do {
+            try displayInput = countUnar(value: newValue, operation: operationType)
+        } catch MathError.infinity {
+            reset()
+            resultLabel.text = MathError.infinity.description
+        } catch MathError.badValueTangent {
+            reset()
+            resultLabel.text = MathError.badValueTangent.description
+        } catch MathError.badValueCotangent {
+            reset()
+            resultLabel.text = MathError.badValueCotangent.description
         }
+        catch {
+            reset()
+            resultLabel.text = MathError.error.description
+        }
+        
     }
     
     @IBAction func onBinarOpetation(_ sender: UIButton) {
@@ -157,7 +171,6 @@ class ViewController: UIViewController {
         if let operationType = MathOperation(rawValue: sender.tag) {
             setOperation(operation: operationType)
         }
-        
     }
     
     @IBAction func onButtonChangeSign(_ sender: UIButton) {
@@ -167,12 +180,12 @@ class ViewController: UIViewController {
         }
         
         switch status.input {
-        case .oldValue:
+        case .oldValue, .result:
             status.input = .newValue
             status.isOperationDone = false
             displayInput = Double(sender.tag)
             
-        case .result , .newValue:
+        case .newValue:
             displayInput = inputValue * -1.0
         }
     }
@@ -193,39 +206,99 @@ class ViewController: UIViewController {
         cleanLabel()
     }
     
-    func count(newValue: Double, oldValue: Double, operation: MathOperation) -> Double? {
+    func countBinar(newValue: Double, oldValue: Double, operation: MathOperation) throws -> Double {
+        var result = Double()
         
         switch operation {
         case .plus:
-            return oldValue + newValue
+            result = oldValue + newValue
             
         case .minus:
-            return oldValue - newValue
+            result = oldValue - newValue
             
         case .multiplication:
-            return oldValue * newValue
+            result = oldValue * newValue
             
         case .division:
-            return oldValue / newValue
+            if newValue == 0 { throw MathError.infinity }
+            result = oldValue / newValue
             
         case .power:
-            return pow(oldValue,newValue)
+            result = pow(oldValue,newValue)
             
         default:
-            return nil
+            throw MathError.error
+        }
+        
+        if result == Double.infinity || result == -Double.infinity {
+            throw MathError.infinity
+        } else {
+            return result
+        }
+    }
+    
+    func countUnar(value: Double, operation: MathOperation) throws -> Double {
+        var result = Double()
+        
+        switch operation {
+        case .cosine:
+            result = cos(value * .pi / 180)
+            
+        case .sinus:
+            result = sin(value * .pi / 180)
+            
+        case .tangent:
+            let remainder = value.truncatingRemainder(dividingBy: 360)
+            if remainder == 90 || remainder == 270 {
+                throw MathError.badValueTangent
+            }
+            result = tan(value * .pi / 180)
+            
+        case .cotangent:
+            let remainder = value.truncatingRemainder(dividingBy: 360)
+            if remainder == 0 || remainder == 180 {
+                throw MathError.badValueCotangent
+            }
+            result = pow(tan(value * .pi / 180),-1)
+            
+        case .squareNumber:
+            result = pow(value,2)
+            
+        case .cubeNumber:
+            result = pow(value,3)
+            
+        case .exponentPower:
+            let exponent = 2.71828182846
+            result = pow(exponent,value)
+            
+        default:
+            throw MathError.error
+        }
+        
+        if result == Double.infinity || result == -Double.infinity  {
+            throw MathError.infinity
+        } else {
+            return result
         }
     }
     
     func updateCalculation(newValue: Double) {
+        var result = 0.0
         
-        if let result = count(newValue: newValue, oldValue: status.oldResult, operation: status.oldOperation) {
+        do {
+            result = try countBinar(newValue: newValue, oldValue: status.oldResult, operation: status.oldOperation)
+            displayInput = result
             status.oldResult = result
             status.isOperationDone = true
             status.input = .result
             displayInput = result
-        }
-        else {
+            
+        } catch MathError.infinity {
             reset()
+            resultLabel.text = MathError.infinity.description
+        } catch {
+            reset()
+            resultLabel.text = MathError.error.description
         }
     }
     
